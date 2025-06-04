@@ -1,9 +1,10 @@
-import { View, Text } from "react-native";
+import PilihBlok from "@/components/PilihBlok";
+import { View } from "react-native";
 
 const Index = () => {
   return (
-    <View>
-      <Text></Text>
+    <View className="flex-1 p-2 bg-white">
+      <PilihBlok />
     </View>
   );
 };
