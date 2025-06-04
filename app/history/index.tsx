@@ -4,7 +4,7 @@ import { View } from "react-native";
 const Index = () => {
   return (
     <View className="flex-1 p-2 bg-white">
-      <PilihBlok />
+      <PilihBlok type="history" />
     </View>
   );
 };
