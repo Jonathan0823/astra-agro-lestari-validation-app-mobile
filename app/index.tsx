@@ -4,11 +4,11 @@ import { Text, TouchableOpacity, View } from "react-native";
 export default function Index() {
   return (
     <View className="flex-1 bg-white p-4">
-      <View className="flex-1 border-4 border-blue-500 rounded-xl overflow-hidden">
+      <View className="flex-1 rounded-xl overflow-hidden space-y-3">
         {/* Kotak 1 */}
         <View className="flex-1">
           <Link href="/validate" asChild>
-            <TouchableOpacity className="flex-1 w-full items-center justify-center bg-red-200 border-b-2 border-white">
+            <TouchableOpacity className="flex-1 w-full items-center justify-center bg-slate-200 border-2 border-slate-500">
               <Text className="text-2xl font-bold text-slate-600">
                 Mulai Validasi
               </Text>
@@ -17,15 +17,25 @@ export default function Index() {
         </View>
 
         {/* Kotak 2 */}
-        <View className="flex-1 items-center justify-center bg-green-200 border-b-2 border-white">
-          <Text className="text-2xl font-bold text-slate-600">
-            Riwayat Validasi
-          </Text>
+        <View className="flex-1">
+          <Link href="/history" asChild>
+            <TouchableOpacity className="flex-1 w-full items-center justify-center bg-slate-200 border-2 border-slate-500">
+              <Text className="text-2xl font-bold text-slate-600">
+                Riwayat Validasi
+              </Text>
+            </TouchableOpacity>
+          </Link>
         </View>
 
         {/* Kotak 3 */}
-        <View className="flex-1 items-center justify-center bg-yellow-200">
-          <Text className="text-2xl font-bold text-slate-600">Data Sample</Text>
+        <View className="flex-1">
+          <Link href="/sample" asChild>
+            <TouchableOpacity className="flex-1 w-full items-center justify-center bg-slate-200 border-2 border-slate-500">
+              <Text className="text-2xl font-bold text-slate-600">
+                Data Sample
+              </Text>
+            </TouchableOpacity>
+          </Link>
         </View>
       </View>
     </View>
