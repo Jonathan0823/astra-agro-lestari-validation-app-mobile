@@ -5,26 +5,20 @@ import { useEffect, useState } from "react";
 
 export default function RootLayout() {
   const [headerName, setHeaderName] = useState("VALIDASI BLOK");
-  const segments = useSegments();
-  const currentPage = segments[segments.length - 1] || "home";
+  const segments = useSegments() as string[];
 
   useEffect(() => {
-    switch (currentPage) {
-      case "validate":
-        setHeaderName("VALIDASI BLOK");
-        break;
-      case "history":
-        setHeaderName("RIWAYAT VALIDASI");
-        break;
-      case "sample":
-        setHeaderName("DATA SAMPLE");
-        break;
-      default:
-        setHeaderName("VALIDASI BLOK");
+    if (segments.includes("validate")) {
+      setHeaderName("VALIDASI BLOK");
+    } else if (segments.includes("history")) {
+      setHeaderName("RIWAYAT VALIDASI");
+    } else if (segments.includes("sample")) {
+      setHeaderName("DATA SAMPLE");
+    } else {
+      setHeaderName("VALIDASI BLOK");
     }
-  }, [currentPage]);
+  }, [segments]);
 
-  console.log("Current Page:", currentPage);
   return (
     <Stack
       screenOptions={{
