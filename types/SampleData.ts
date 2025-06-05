@@ -1,8 +1,8 @@
 export type SampleData = {
   id?: number;
   blok: number;
-  nomorBaris: string;
-  imageUri: string;
+  nomor_baris: string;
+  image_uri: string;
   circle: boolean;
   gawangan: boolean;
   pruning: boolean;
