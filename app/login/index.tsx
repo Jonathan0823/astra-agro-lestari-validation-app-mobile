@@ -1,3 +1,4 @@
+import { Login } from "@/lib/auth";
 import { useState } from "react";
 import {
   View,
@@ -6,11 +7,26 @@ import {
   ActivityIndicator,
   TouchableOpacity,
 } from "react-native";
+import * as SecureStore from "expo-secure-store";
+import { router } from "expo-router";
 
 const Index = () => {
   const [id, setId] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
+
+  const handleLogin = async () => {
+    setLoading(true);
+    try {
+      const user = await Login(id, password);
+      await SecureStore.setItemAsync("user", JSON.stringify(user));
+      router.replace("/");
+    } catch (err) {
+      console.error("Login failed:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <View className="flex-1 items-center justify-center bg-white">
@@ -52,6 +68,7 @@ const Index = () => {
             className={`bg-primary rounded-lg px-4 py-2 mt-4 ${
               loading || !id || !password ? "opacity-50" : "opacity-100"
             }`}
+            onPress={handleLogin}
           >
             <Text className="text-white text-center font-bold">Login</Text>
           </TouchableOpacity>
