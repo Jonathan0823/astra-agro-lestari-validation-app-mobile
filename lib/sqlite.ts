@@ -43,3 +43,43 @@ export const insertData = async (db: SQLiteDatabase, data: SampleData) => {
     throw error;
   }
 };
+
+export const getSampleByBlok = async (
+  blok: number,
+  db: SQLiteDatabase,
+): Promise<{
+  total: number;
+  circle: number;
+  gawangan: number;
+  pruning: number;
+}> => {
+  try {
+    const result = await db.getFirstAsync<{
+      total: number;
+      circle: number;
+      gawangan: number;
+      pruning: number;
+    }>(
+      `
+      SELECT 
+        COUNT(*) AS total,
+        SUM(circle) AS circle,
+        SUM(gawangan) AS gawangan,
+        SUM(pruning) AS pruning
+      FROM sample_data
+      WHERE blok = ?
+      `,
+      [blok],
+    );
+
+    return {
+      total: result?.total || 0,
+      circle: result?.circle || 0,
+      gawangan: result?.gawangan || 0,
+      pruning: result?.pruning || 0,
+    };
+  } catch (error) {
+    console.error("Error fetching sample data by blok:", error);
+    throw error;
+  }
+};
