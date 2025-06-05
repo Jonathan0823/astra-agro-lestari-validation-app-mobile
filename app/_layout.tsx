@@ -4,6 +4,7 @@ import { Image, View, Text, TouchableOpacity, Alert } from "react-native";
 import { useEffect, useState } from "react";
 import * as SecureStore from "expo-secure-store";
 import { User } from "@/types/User";
+import Toast from "react-native-toast-message";
 
 export default function RootLayout() {
   const [headerName, setHeaderName] = useState("VALIDASI BLOK");
@@ -66,36 +67,41 @@ export default function RootLayout() {
   };
 
   return (
-    <Stack
-      screenOptions={{
-        headerShown: true,
-        headerTitleAlign: "center",
-        headerTitle: () => (
-          <View className="bg-secondary p-2 rounded-lg flex">
-            <Text className="text-xl font-bold text-primary">{headerName}</Text>
-          </View>
-        ),
-        headerLeft: () => (
-          <Image
-            source={require("@/assets/images/company-logo.png")}
-            className="w-12 h-12 ml-3"
-          />
-        ),
-        headerRight: () => (
-          <TouchableOpacity onPress={handleClickUser}>
-            <View
-              className={`flex-row items-center mr-3 ${segments.length === 0 ? "w-20" : ""} `}
-            >
-              <Text className="text-md font-semibold text-gray-600">
-                {user?.username || "SIGN IN"}
+    <>
+      <Stack
+        screenOptions={{
+          headerShown: true,
+          headerTitleAlign: "center",
+          headerTitle: () => (
+            <View className="bg-secondary p-2 rounded-lg flex">
+              <Text className="text-xl font-bold text-primary">
+                {headerName}
               </Text>
             </View>
-          </TouchableOpacity>
-        ),
-        headerStyle: {
-          backgroundColor: "white",
-        },
-      }}
-    />
+          ),
+          headerLeft: () => (
+            <Image
+              source={require("@/assets/images/company-logo.png")}
+              className="w-12 h-12 ml-3"
+            />
+          ),
+          headerRight: () => (
+            <TouchableOpacity onPress={handleClickUser}>
+              <View
+                className={`flex-row items-center mr-3 ${segments.length === 0 ? "w-20" : ""} `}
+              >
+                <Text className="text-md font-semibold text-gray-600">
+                  {user?.username || "SIGN IN"}
+                </Text>
+              </View>
+            </TouchableOpacity>
+          ),
+          headerStyle: {
+            backgroundColor: "white",
+          },
+        }}
+      />
+      <Toast />
+    </>
   );
 }

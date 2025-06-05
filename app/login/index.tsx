@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import * as SecureStore from "expo-secure-store";
 import { router } from "expo-router";
+import Toast from "react-native-toast-message";
 
 const Index = () => {
   const [id, setId] = useState<string>("");
@@ -21,8 +22,14 @@ const Index = () => {
       const user = await Login(id, password);
       await SecureStore.setItemAsync("user", JSON.stringify(user));
       router.replace("/");
-    } catch (err) {
-      console.error("Login failed:", err);
+    } catch {
+      Toast.show({
+        type: "error",
+        text1: "Login Failed",
+        text2: "Invalid ID or Password",
+        position: "top",
+        topOffset: 100,
+      });
     } finally {
       setLoading(false);
     }
