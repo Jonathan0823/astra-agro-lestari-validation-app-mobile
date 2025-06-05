@@ -6,9 +6,9 @@ import ValidationOptions from "@/components/ValidationOption";
 import { StatusItem } from "@/types/StatusItem";
 
 const initialStatusData: StatusItem[] = [
-  { label: "CIRCLE", status1: true, status2: false },
-  { label: "GAWANGAN", status1: true, status2: false },
-  { label: "PRUNING", status1: true, status2: false },
+  { label: "CIRCLE", status: true },
+  { label: "GAWANGAN", status: true },
+  { label: "PRUNING", status: true },
 ];
 
 const Index = () => {

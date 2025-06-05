@@ -1,6 +1,6 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
-import { StatusItem, StatusType } from "@/types/StatusItem";
+import { StatusItem } from "@/types/StatusItem";
 import { Dispatch, SetStateAction } from "react";
 
 type ValidationOptionsProps = {
@@ -9,10 +9,14 @@ type ValidationOptionsProps = {
 };
 
 const StatusBox = ({
-  status,
+  active,
+  icon,
+  color,
   onPress,
 }: {
-  status: StatusType;
+  active: boolean;
+  icon: "check" | "close";
+  color: string;
   onPress: () => void;
 }) => (
   <TouchableOpacity onPress={onPress}>
@@ -28,8 +32,7 @@ const StatusBox = ({
         marginHorizontal: 4,
       }}
     >
-      {status === true && <FontAwesome name="check" size={16} color="lime" />}
-      {status === "x" && <FontAwesome name="close" size={16} color="red" />}
+      {active && <FontAwesome name={icon} size={16} color={color} />}
     </View>
   </TouchableOpacity>
 );
@@ -38,25 +41,9 @@ export default function ValidationOptions({
   statusData,
   setStatusData,
 }: ValidationOptionsProps) {
-  const setExclusiveStatus = (
-    rowIndex: number,
-    field: "status1" | "status2",
-  ) => {
+  const setStatus = (index: number, value: boolean) => {
     setStatusData((prev) =>
-      prev.map((item, i) => {
-        if (i !== rowIndex) return item;
-
-        const newStatus: StatusItem = {
-          ...item,
-          status1: false,
-          status2: false,
-        };
-
-        if (field === "status1") newStatus.status1 = true;
-        if (field === "status2") newStatus.status2 = "x";
-
-        return newStatus;
-      }),
+      prev.map((item, i) => (i === index ? { ...item, status: value } : item)),
     );
   };
 
@@ -75,12 +62,16 @@ export default function ValidationOptions({
             • {item.label}
           </Text>
           <StatusBox
-            status={item.status1}
-            onPress={() => setExclusiveStatus(index, "status1")}
+            active={item.status === true}
+            icon="check"
+            color="lime"
+            onPress={() => setStatus(index, true)}
           />
           <StatusBox
-            status={item.status2}
-            onPress={() => setExclusiveStatus(index, "status2")}
+            active={item.status === false}
+            icon="close"
+            color="red"
+            onPress={() => setStatus(index, false)}
           />
         </View>
       ))}

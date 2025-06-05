@@ -1,9 +1,6 @@
-type StatusType = boolean | "x";
-
 type StatusItem = {
   label: string;
-  status1: StatusType;
-  status2: StatusType;
+  status: boolean;
 };
 
-export { StatusType, StatusItem };
+export { StatusItem };
