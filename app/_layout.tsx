@@ -1,8 +1,30 @@
-import { Stack } from "expo-router";
+import { Stack, useSegments } from "expo-router";
 import "@/app/globals.css";
 import { Image, View, Text } from "react-native";
+import { useEffect, useState } from "react";
 
 export default function RootLayout() {
+  const [headerName, setHeaderName] = useState("VALIDASI BLOK");
+  const segments = useSegments();
+  const currentPage = segments[segments.length - 1] || "home";
+
+  useEffect(() => {
+    switch (currentPage) {
+      case "validate":
+        setHeaderName("VALIDASI BLOK");
+        break;
+      case "history":
+        setHeaderName("RIWAYAT VALIDASI");
+        break;
+      case "sample":
+        setHeaderName("DATA SAMPLE");
+        break;
+      default:
+        setHeaderName("VALIDASI BLOK");
+    }
+  }, [currentPage]);
+
+  console.log("Current Page:", currentPage);
   return (
     <Stack
       screenOptions={{
@@ -10,9 +32,7 @@ export default function RootLayout() {
         headerTitleAlign: "center",
         headerTitle: () => (
           <View className="bg-secondary p-2 rounded-lg flex">
-            <Text className="text-xl font-bold text-primary">
-              VALIDASI BLOK
-            </Text>
+            <Text className="text-xl font-bold text-primary">{headerName}</Text>
           </View>
         ),
         headerLeft: () => (
