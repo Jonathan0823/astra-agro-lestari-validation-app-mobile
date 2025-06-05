@@ -7,7 +7,14 @@ type PilihBlokProps = {
 
 const PilihBlok = ({ type }: PilihBlokProps) => {
   const handlePress = (blokNumber: number) => {
-    router.push(`/`);
+    if (type === "history") {
+      router.push(`/history/${blokNumber}`);
+      return;
+    } else if (type === "sample") {
+      router.push(`/sample/${blokNumber}`);
+      return;
+    }
+    router.push(`/validate/${blokNumber}`);
   };
 
   const renderBloks = () => {
@@ -26,6 +33,7 @@ const PilihBlok = ({ type }: PilihBlokProps) => {
               <TouchableOpacity
                 className="px-3 py-2 rounded"
                 style={{ backgroundColor: "#effbeb" }}
+                onPress={() => handlePress(blokNum)}
               >
                 <Text className="font-semibold text-sm text-black">
                   LIHAT {type === "sample" ? "DATA" : "RIWAYAT"}
