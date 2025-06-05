@@ -1,10 +1,12 @@
-import React, { useState } from "react";
-import { View, Button, Image } from "react-native";
+import React from "react";
+import { View, Button } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 
-const CameraComp = () => {
-  const [imageUri, setImageUri] = useState<string | null>(null);
+type CameraCompProps = {
+  setImageUri: (uri: string) => void;
+};
 
+const CameraComp = ({ setImageUri }: CameraCompProps) => {
   const openCamera = async () => {
     const permission = await ImagePicker.requestCameraPermissionsAsync();
     if (!permission.granted) {
@@ -22,14 +24,8 @@ const CameraComp = () => {
   };
 
   return (
-    <View className="flex-1 items-center justify-center bg-white p-4">
-      <Button title="Open Camera" onPress={openCamera} />
-      {imageUri && (
-        <Image
-          source={{ uri: imageUri }}
-          style={{ width: 200, height: 200, marginTop: 20 }}
-        />
-      )}
+    <View className="items-center justify-center p-4">
+      <Button title="Mulai Foto" onPress={openCamera} />
     </View>
   );
 };
