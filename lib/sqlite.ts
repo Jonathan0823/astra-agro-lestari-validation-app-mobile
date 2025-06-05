@@ -29,8 +29,8 @@ export const insertData = async (db: SQLiteDatabase, data: SampleData) => {
       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         data.blok,
-        data.nomorBaris,
-        data.imageUri,
+        data.nomor_baris,
+        data.image_uri,
         circleInt,
         gawanganInt,
         pruningInt,
