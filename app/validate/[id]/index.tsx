@@ -1,9 +1,12 @@
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { View, Text, TextInput, Image } from "react-native";
 import CameraComp from "@/components/CameraComp";
 import { useState } from "react";
 import ValidationOptions from "@/components/ValidationOption";
 import { StatusItem } from "@/types/StatusItem";
+import Toast from "react-native-toast-message";
+import { saveImageToPersistentStorage } from "@/helpers/SaveImagetoPersistentStorage";
+import { saveDataToLocalCache } from "@/helpers/SaveDataToLocalCache";
 
 const initialStatusData: StatusItem[] = [
   { label: "CIRCLE", status: true },
@@ -17,6 +20,48 @@ const Index = () => {
   const [imageUri, setImageUri] = useState<string | null>(null);
   const [statusData, setStatusData] = useState<StatusItem[]>(initialStatusData);
   const [step, setStep] = useState<"form" | "validate">("form");
+
+  const handleComplete = async (type: string) => {
+    if (!nomorBaris || !imageUri) {
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Nomor Baris dan Foto harus diisi!",
+        position: "top",
+        topOffset: 100,
+      });
+      return;
+    }
+
+    try {
+      const savedUri = await saveImageToPersistentStorage(imageUri);
+      const payload = {
+        blok: id,
+        nomorBaris,
+        circle: statusData[0].status,
+        gawangan: statusData[1].status,
+        pruning: statusData[2].status,
+        imageUri: savedUri,
+        timestamp: Date.now(),
+      };
+
+      await saveDataToLocalCache(payload);
+      setImageUri(null);
+      setStatusData(initialStatusData);
+
+      if (type === "complete") {
+        router.push("/");
+      }
+    } catch {
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Terjadi kesalahan saat menyimpan data!",
+        position: "top",
+        topOffset: 100,
+      });
+    }
+  };
 
   return (
     <View className="flex-1 bg-white p-2">
@@ -60,6 +105,7 @@ const Index = () => {
           setStep("validate");
         }}
         nomorBaris={nomorBaris}
+        onComplete={handleComplete}
       />
     </View>
   );
