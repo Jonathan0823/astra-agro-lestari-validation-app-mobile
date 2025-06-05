@@ -6,7 +6,7 @@ type CameraCompProps = {
   step: "form" | "validate";
   onTakingImage: (uri: string) => void;
   nomorBaris: string;
-  onComplete: () => void;
+  onComplete: (type: string) => void;
 };
 
 const CameraComp = ({
@@ -27,7 +27,8 @@ const CameraComp = ({
     });
 
     if (!result.canceled) {
-      onTakingImage(result.assets[0].uri);
+      const originalUri = result.assets[0].uri;
+      onTakingImage(originalUri);
     }
   };
 
@@ -36,7 +37,7 @@ const CameraComp = ({
       {step === "validate" && (
         <TouchableHighlight
           className={`bg-primary rounded-lg p-4 ${!nomorBaris ? "opacity-60" : ""}`}
-          onPress={onComplete}
+          onPress={() => onComplete("complete")}
           disabled={!nomorBaris}
         >
           <Text className="text-white font-bold text-lg">Selesai</Text>
@@ -44,7 +45,12 @@ const CameraComp = ({
       )}
       <TouchableHighlight
         className={`bg-primary rounded-lg p-4 ${!nomorBaris ? "opacity-60" : ""}`}
-        onPress={openCamera}
+        onPress={async () => {
+          if (step !== "form") {
+            onComplete("next");
+          }
+          await openCamera();
+        }}
         disabled={!nomorBaris}
       >
         <Text className="text-white font-bold text-lg">
