@@ -21,7 +21,8 @@ const _layout = () => {
           gawangan INTEGER DEFAULT 0,
           pruning INTEGER DEFAULT 0,
           created_at TEXT,
-          updated_at TEXT
+          updated_at TEXT,
+          is_synced INTEGER DEFAULT 0
         );
       `);
             console.log("DB initialized");
