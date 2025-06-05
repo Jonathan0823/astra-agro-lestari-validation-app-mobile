@@ -3,10 +3,18 @@ import { View, TouchableHighlight, Text } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 
 type CameraCompProps = {
-  setImageUri: (uri: string) => void;
+  step: "form" | "validate";
+  onTakingImage: (uri: string) => void;
+  nomorBaris: string;
+  onComplete: () => void;
 };
 
-const CameraComp = ({ setImageUri }: CameraCompProps) => {
+const CameraComp = ({
+  step,
+  onTakingImage,
+  nomorBaris,
+  onComplete,
+}: CameraCompProps) => {
   const openCamera = async () => {
     const permission = await ImagePicker.requestCameraPermissionsAsync();
     if (!permission.granted) {
@@ -19,17 +27,29 @@ const CameraComp = ({ setImageUri }: CameraCompProps) => {
     });
 
     if (!result.canceled) {
-      setImageUri(result.assets[0].uri);
+      onTakingImage(result.assets[0].uri);
     }
   };
 
   return (
-    <View className="items-center justify-center p-4 pb-10">
+    <View className="items-center justify-center p-4 pb-10 gap-5 flex flex-row">
+      {step === "validate" && (
+        <TouchableHighlight
+          className={`bg-primary rounded-lg p-4 ${!nomorBaris ? "opacity-60" : ""}`}
+          onPress={onComplete}
+          disabled={!nomorBaris}
+        >
+          <Text className="text-white font-bold text-lg">Selesai</Text>
+        </TouchableHighlight>
+      )}
       <TouchableHighlight
-        className="bg-primary rounded-lg p-4"
+        className={`bg-primary rounded-lg p-4 ${!nomorBaris ? "opacity-60" : ""}`}
         onPress={openCamera}
+        disabled={!nomorBaris}
       >
-        <Text className="text-white font-bold text-lg">Open Camera</Text>
+        <Text className="text-white font-bold text-lg">
+          {step === "form" ? "Ambil Foto" : "Lanjut Foto"}
+        </Text>
       </TouchableHighlight>
     </View>
   );
