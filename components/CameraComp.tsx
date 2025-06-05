@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Button } from "react-native";
+import { View, TouchableHighlight, Text } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 
 type CameraCompProps = {
@@ -24,8 +24,13 @@ const CameraComp = ({ setImageUri }: CameraCompProps) => {
   };
 
   return (
-    <View className="items-center justify-center p-4">
-      <Button title="Mulai Foto" onPress={openCamera} />
+    <View className="items-center justify-center p-4 pb-10">
+      <TouchableHighlight
+        className="bg-primary rounded-lg p-4"
+        onPress={openCamera}
+      >
+        <Text className="text-white font-bold text-lg">Open Camera</Text>
+      </TouchableHighlight>
     </View>
   );
 };
