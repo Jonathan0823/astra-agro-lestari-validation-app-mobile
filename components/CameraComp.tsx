@@ -23,7 +23,7 @@ const CameraComp = ({
     }
 
     const result = await ImagePicker.launchCameraAsync({
-      quality: 1,
+      quality: 0.5,
     });
 
     if (!result.canceled) {
