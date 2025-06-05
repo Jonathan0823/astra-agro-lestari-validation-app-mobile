@@ -6,7 +6,9 @@ import ValidationOptions from "@/components/ValidationOption";
 import { StatusItem } from "@/types/StatusItem";
 import Toast from "react-native-toast-message";
 import { saveImageToPersistentStorage } from "@/helpers/SaveImagetoPersistentStorage";
-import { saveDataToLocalCache } from "@/helpers/SaveDataToLocalCache";
+import { SampleData } from "@/types/SampleData";
+import { useSQLiteContext } from "expo-sqlite";
+import { insertData } from "@/lib/sqlite";
 
 const initialStatusData: StatusItem[] = [
   { label: "CIRCLE", status: true },
@@ -20,6 +22,7 @@ const Index = () => {
   const [imageUri, setImageUri] = useState<string | null>(null);
   const [statusData, setStatusData] = useState<StatusItem[]>(initialStatusData);
   const [step, setStep] = useState<"form" | "validate">("form");
+  const db = useSQLiteContext();
 
   const handleComplete = async (type: string) => {
     if (!nomorBaris || !imageUri) {
@@ -35,17 +38,19 @@ const Index = () => {
 
     try {
       const savedUri = await saveImageToPersistentStorage(imageUri);
-      const payload = {
-        blok: id,
+      const payload: SampleData = {
+        blok: Number(id),
         nomorBaris,
         circle: statusData[0].status,
         gawangan: statusData[1].status,
         pruning: statusData[2].status,
         imageUri: savedUri,
-        timestamp: Date.now(),
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
       };
 
-      await saveDataToLocalCache(payload);
+      await insertData(db, payload);
+      console.log("Data saved successfully:", payload);
       setImageUri(null);
       setStatusData(initialStatusData);
 
