@@ -40,11 +40,11 @@ const Index = () => {
       const savedUri = await saveImageToPersistentStorage(imageUri);
       const payload: SampleData = {
         blok: Number(id),
-        nomorBaris,
+        nomor_baris: nomorBaris,
         circle: statusData[0].status,
         gawangan: statusData[1].status,
         pruning: statusData[2].status,
-        imageUri: savedUri,
+        image_uri: savedUri,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       };
