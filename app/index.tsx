@@ -1,7 +1,34 @@
-import { Link } from "expo-router";
-import { Text, TouchableOpacity, View } from "react-native";
+import { Link, useFocusEffect } from "expo-router";
+import { useCallback } from "react";
+import { Alert, BackHandler, Text, TouchableOpacity, View } from "react-native";
 
 export default function Index() {
+  useFocusEffect(
+    useCallback(() => {
+      const backAction = () => {
+        Alert.alert("Keluar", "Apakah kamu ingin keluar dari aplikasi?", [
+          {
+            text: "Batal",
+            onPress: () => null,
+            style: "cancel",
+          },
+          {
+            text: "Ya",
+            onPress: () => BackHandler.exitApp(),
+          },
+        ]);
+        return true;
+      };
+
+      const backHandler = BackHandler.addEventListener(
+        "hardwareBackPress",
+        backAction,
+      );
+
+      return () => backHandler.remove();
+    }, []),
+  );
+
   return (
     <View className="flex-1 bg-white p-4 pb-10">
       <View className="flex flex-col h-full gap-6">
