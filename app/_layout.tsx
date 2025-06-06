@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import * as SecureStore from "expo-secure-store";
 import { User } from "@/types/User";
 import Toast from "react-native-toast-message";
+import { Providers } from "@/components/Providers";
 
 export default function RootLayout() {
   const [headerName, setHeaderName] = useState("VALIDASI BLOK");
@@ -67,7 +68,7 @@ export default function RootLayout() {
   };
 
   return (
-    <>
+    <Providers>
       <Stack
         screenOptions={{
           headerShown: true,
@@ -102,6 +103,6 @@ export default function RootLayout() {
         }}
       />
       <Toast />
-    </>
+    </Providers>
   );
 }
