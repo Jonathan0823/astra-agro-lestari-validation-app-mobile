@@ -1,11 +1,15 @@
+import { useDatabase } from "@/components/Providers";
+import { deleteDataByBlok } from "@/lib/sqlite";
 import { router } from "expo-router";
-import { View, Text, TouchableOpacity, ScrollView } from "react-native";
+import { View, Text, TouchableOpacity, ScrollView, Alert } from "react-native";
+import Toast from "react-native-toast-message";
 
 type PilihBlokProps = {
   type?: "validate" | "history" | "sample";
 };
 
 const PilihBlok = ({ type }: PilihBlokProps) => {
+  const { db } = useDatabase();
   const handlePress = (blokNumber: number) => {
     if (type === "history") {
       router.push(`/history/${blokNumber}`);
@@ -15,6 +19,41 @@ const PilihBlok = ({ type }: PilihBlokProps) => {
       return;
     }
     router.push(`/validate/${blokNumber}`);
+  };
+
+  const handleDelete = async (blokNumber: number) => {
+    if (!db) return;
+    try {
+      Alert.alert(
+        "Hapus Data",
+        `Apakah Anda yakin ingin menghapus data pada Blok ${blokNumber}?`,
+        [
+          {
+            text: "Batal",
+            style: "cancel",
+          },
+          {
+            text: "Hapus",
+            onPress: async () => {
+              await deleteDataByBlok(blokNumber, db);
+              Toast.show({
+                type: "success",
+                text1: "Data berhasil dihapus",
+                text2: `Data pada Blok ${blokNumber} telah berhasil dihapus.`,
+                topOffset: 100,
+              });
+            },
+          },
+        ],
+      );
+    } catch {
+      Toast.show({
+        type: "error",
+        text1: "Gagal menghapus data",
+        text2: `Terjadi kesalahan saat menghapus data pada Blok ${blokNumber}.`,
+        topOffset: 100,
+      });
+    }
   };
 
   const renderBloks = () => {
@@ -43,7 +82,7 @@ const PilihBlok = ({ type }: PilihBlokProps) => {
               <TouchableOpacity
                 className="px-3 py-2 rounded"
                 style={{ backgroundColor: "red" }}
-                onPress={() => console.log("Hapus blok", blokNum)}
+                onPress={() => handleDelete(blokNum)}
               >
                 <Text className="text-white font-semibold text-sm">
                   HAPUS DATA
