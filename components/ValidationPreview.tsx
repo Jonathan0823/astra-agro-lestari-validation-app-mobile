@@ -3,7 +3,7 @@ import { getDataByBlok } from "@/lib/sqlite";
 import { SampleData } from "@/types/SampleData";
 import { FontAwesome } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
-import { View, Text, Image } from "react-native";
+import { View, ScrollView, Text, Image } from "react-native";
 
 type ValidationPreviewProps = {
   id: string;
@@ -25,7 +25,7 @@ const ValidationPreview = ({ id }: ValidationPreviewProps) => {
     getData();
   }, [id, db]);
   return (
-    <View className="flex-1 bg-white p-2">
+    <ScrollView className="flex-1 bg-white p-2">
       {(data?.length as number) > 0 &&
         data?.map((item, index) => (
           <View
@@ -120,7 +120,7 @@ const ValidationPreview = ({ id }: ValidationPreviewProps) => {
             </View>
           </View>
         ))}
-    </View>
+    </ScrollView>
   );
 };
 
