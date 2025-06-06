@@ -38,7 +38,8 @@ export const Providers: React.FC<SQLiteProviderProps> = ({ children }) => {
           pruning INTEGER DEFAULT 0,
           created_at TEXT,
           updated_at TEXT,
-          is_synced INTEGER DEFAULT 0
+          is_synced INTEGER DEFAULT 0,
+          firebase_id TEXT
         );
       `);
 
