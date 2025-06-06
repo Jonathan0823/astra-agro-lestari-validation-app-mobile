@@ -15,7 +15,8 @@
       "autoIncrement": true,
       "android": {
         "buildType": "app-bundle"
-      }
+      },
+      "workflow": "managed"
     }
   },
   "submit": {
