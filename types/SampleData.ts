@@ -8,4 +8,5 @@ export type SampleData = {
   pruning: boolean;
   createdAt: string;
   updatedAt: string;
+  firebase_id?: string;
 };
