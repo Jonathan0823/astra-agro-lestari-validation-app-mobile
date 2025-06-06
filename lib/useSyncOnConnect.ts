@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import NetInfo from "@react-native-community/netinfo";
+import NetInfo, { NetInfoState } from "@react-native-community/netinfo";
 import { syncToFirebase } from "@/lib/syncToFirebase";
 import { syncFromFirebase } from "@/lib/syncFromFirebase";
 import { useDatabase } from "@/components/Providers";
@@ -9,12 +9,14 @@ export const useSyncOnConnect = () => {
   useEffect(() => {
     if (!db) return;
 
-    const unsubscribe = NetInfo.addEventListener((state) => {
+    const handleConnectivityChange = async (state: NetInfoState) => {
       if (state.isConnected) {
-        syncToFirebase(db);
-        syncFromFirebase(db);
+        await syncToFirebase(db);
+        await syncFromFirebase(db);
       }
-    });
+    };
+
+    const unsubscribe = NetInfo.addEventListener(handleConnectivityChange);
 
     return () => unsubscribe();
   }, [db]);
