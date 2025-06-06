@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "validation-project",
+    "name": "Astra Argo Lestari",
     "slug": "project1",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -16,8 +16,7 @@
         "foregroundImage": "./assets/images/company-logo.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true,
-      "package": "com.anonymous.project1"
+      "package": "com.jonathan.astraargolestari"
     },
     "web": {
       "bundler": "metro",
