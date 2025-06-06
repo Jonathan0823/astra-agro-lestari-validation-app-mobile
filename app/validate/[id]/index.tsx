@@ -50,7 +50,6 @@ const Index = () => {
       };
 
       await insertData(db, payload);
-      console.log("Data saved successfully:", payload);
       setImageUri(null);
       setStatusData(initialStatusData);
 

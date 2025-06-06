@@ -21,7 +21,6 @@ const Index = () => {
       if (!db) return;
       try {
         const data = await getSampleByBlok(Number(id), db);
-        console.log("Data fetched:", data);
         setData(data);
       } catch {}
     };
