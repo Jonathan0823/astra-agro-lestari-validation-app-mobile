@@ -7,7 +7,7 @@ export const getDataByBlok = async (
 ): Promise<any[]> => {
   try {
     const rows = await db.getAllAsync(
-      `SELECT * FROM sample_data WHERE blok = ? ORDER BY created_at DESC`,
+      `SELECT * FROM sample_data WHERE blok = ? ORDER BY created_at ASC`,
       [blok],
     );
     return rows;
