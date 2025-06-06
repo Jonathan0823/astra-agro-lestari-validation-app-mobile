@@ -1,5 +1,7 @@
+import db from "@/firebaseConfig";
 import { SampleData } from "@/types/SampleData";
 import { SQLiteDatabase } from "expo-sqlite";
+import { deleteDoc, doc } from "firebase/firestore";
 
 export const getDataByBlok = async (
   blok: number,
@@ -86,10 +88,23 @@ export const getSampleByBlok = async (
 
 export const deleteDataByBlok = async (
   blok: number,
-  db: SQLiteDatabase,
+  localDB: SQLiteDatabase,
 ): Promise<void> => {
   try {
-    await db.runAsync(`DELETE FROM sample_data WHERE blok = ?`, [blok]);
+    const rows = await localDB.getAllAsync<{ firebase_id: string }>(
+      `SELECT firebase_id FROM sample_data WHERE blok = ? AND firebase_id IS NOT NULL`,
+      [blok],
+    );
+
+    for (const row of rows) {
+      if (row.firebase_id) {
+        const docRef = doc(db, "sample_data", row.firebase_id);
+        await deleteDoc(docRef);
+      }
+    }
+
+    await localDB.runAsync(`DELETE FROM sample_data WHERE blok = ?`, [blok]);
+    console.log(`Deleted data with blok = ${blok} from SQLite and Firebase`);
   } catch (error) {
     console.error("Error deleting data by blok:", error);
     throw error;
