@@ -53,14 +53,17 @@ const Index = () => {
         >
           ASTRA AGRO
         </Text>
+        <Text className="font-semibold">ID :</Text>
         <TextInput
-          className="flex rounded-lg px-4 mb-4 bg-white"
+          className="flex rounded-lg px-4 mb-4 bg-white text-black"
           placeholder="ID"
           autoCapitalize="none"
           onChangeText={(text) => setId(text)}
         ></TextInput>
+
+        <Text className="font-semibold">Password :</Text>
         <TextInput
-          className="flex rounded-lg px-4 mb-4 bg-white"
+          className="flex rounded-lg px-4 mb-4 bg-white text-black"
           placeholder="Password"
           autoCapitalize="none"
           secureTextEntry={true}
