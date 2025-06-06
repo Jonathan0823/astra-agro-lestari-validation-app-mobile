@@ -4,6 +4,7 @@ import { SampleData } from "@/types/SampleData";
 import { FontAwesome } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
 import { View, ScrollView, Text, Image } from "react-native";
+import Toast from "react-native-toast-message";
 
 type ValidationPreviewProps = {
   id: string;
@@ -18,9 +19,15 @@ const ValidationPreview = ({ id }: ValidationPreviewProps) => {
       if (!db) return;
       try {
         const res = await getDataByBlok(Number(id), db);
-        console.log("Data fetched:", res);
         setData(res);
-      } catch {}
+      } catch {
+        Toast.show({
+          type: "error",
+          text1: "Gagal memuat data",
+          text2: `Terjadi kesalahan saat memuat data untuk Blok ${id}.`,
+          topOffset: 100,
+        });
+      }
     };
     getData();
   }, [id, db]);
