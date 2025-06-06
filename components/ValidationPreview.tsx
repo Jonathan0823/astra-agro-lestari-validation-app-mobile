@@ -1,7 +1,7 @@
+import { useDatabase } from "@/components/Providers";
 import { getDataByBlok } from "@/lib/sqlite";
 import { SampleData } from "@/types/SampleData";
 import { FontAwesome } from "@expo/vector-icons";
-import { useSQLiteContext } from "expo-sqlite";
 import { useEffect, useState } from "react";
 import { View, Text, Image } from "react-native";
 
@@ -11,10 +11,11 @@ type ValidationPreviewProps = {
 
 const ValidationPreview = ({ id }: ValidationPreviewProps) => {
   const [data, setData] = useState<SampleData[]>();
-  const db = useSQLiteContext();
+  const { db } = useDatabase();
 
   useEffect(() => {
     const getData = async () => {
+      if (!db) return;
       try {
         const res = await getDataByBlok(Number(id), db);
         console.log("Data fetched:", res);

@@ -7,8 +7,8 @@ import { StatusItem } from "@/types/StatusItem";
 import Toast from "react-native-toast-message";
 import { saveImageToPersistentStorage } from "@/helpers/SaveImagetoPersistentStorage";
 import { SampleData } from "@/types/SampleData";
-import { useSQLiteContext } from "expo-sqlite";
 import { insertData } from "@/lib/sqlite";
+import { useDatabase } from "@/components/Providers";
 
 const initialStatusData: StatusItem[] = [
   { label: "CIRCLE", status: true },
@@ -22,10 +22,10 @@ const Index = () => {
   const [imageUri, setImageUri] = useState<string | null>(null);
   const [statusData, setStatusData] = useState<StatusItem[]>(initialStatusData);
   const [step, setStep] = useState<"form" | "validate">("form");
-  const db = useSQLiteContext();
+  const { db } = useDatabase();
 
   const handleComplete = async (type: string) => {
-    if (!nomorBaris || !imageUri) {
+    if (!nomorBaris || !imageUri || !db) {
       Toast.show({
         type: "error",
         text1: "Error",

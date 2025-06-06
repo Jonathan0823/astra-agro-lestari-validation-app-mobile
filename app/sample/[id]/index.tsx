@@ -1,6 +1,6 @@
+import { useDatabase } from "@/components/Providers";
 import { getSampleByBlok } from "@/lib/sqlite";
 import { useLocalSearchParams } from "expo-router";
-import { useSQLiteContext } from "expo-sqlite";
 import { useEffect, useState } from "react";
 import { View, Text } from "react-native";
 
@@ -14,10 +14,11 @@ type SampleData = {
 const Index = () => {
   const { id } = useLocalSearchParams();
   const [data, setData] = useState<SampleData>();
-  const db = useSQLiteContext();
+  const { db } = useDatabase();
 
   useEffect(() => {
     const getData = async () => {
+      if (!db) return;
       try {
         const data = await getSampleByBlok(Number(id), db);
         console.log("Data fetched:", data);
