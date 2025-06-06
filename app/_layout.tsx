@@ -74,8 +74,8 @@ export default function RootLayout() {
           headerShown: true,
           headerTitleAlign: "center",
           headerTitle: () => (
-            <View className="bg-secondary p-2 rounded-lg flex">
-              <Text className="text-xl font-bold text-primary">
+            <View className="bg-secondary p-2 rounded-lg flex w-[180px]">
+              <Text className="text-xl font-bold text-primary text-center">
                 {headerName}
               </Text>
             </View>
