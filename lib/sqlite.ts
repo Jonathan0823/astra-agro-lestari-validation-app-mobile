@@ -83,3 +83,15 @@ export const getSampleByBlok = async (
     throw error;
   }
 };
+
+export const deleteDataByBlok = async (
+  blok: number,
+  db: SQLiteDatabase,
+): Promise<void> => {
+  try {
+    await db.runAsync(`DELETE FROM sample_data WHERE blok = ?`, [blok]);
+  } catch (error) {
+    console.error("Error deleting data by blok:", error);
+    throw error;
+  }
+};
