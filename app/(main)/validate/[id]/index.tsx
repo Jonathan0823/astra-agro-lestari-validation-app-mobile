@@ -54,7 +54,7 @@ const Index = () => {
       setStatusData(initialStatusData);
 
       if (type === "complete") {
-        router.push("/");
+        router.replace("/");
       }
     } catch {
       Toast.show({
