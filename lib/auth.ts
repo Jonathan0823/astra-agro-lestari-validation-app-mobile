@@ -1,24 +1,30 @@
-import db from "@/firebaseConfig";
 import { User } from "@/types/User";
-import { collection, getDocs, query, where } from "firebase/firestore";
+
+const user = [
+  {
+    username: process.env.EXPO_PUBLIC_USERNAME,
+    password: process.env.EXPO_PUBLIC_PASSWORD,
+  },
+];
 
 const Login = async (username: string, password: string): Promise<User> => {
-  const q = query(
-    collection(db, "users"),
-    where("username", "==", username.trim()),
+  if (!username || !password) {
+    throw new Error("Username and password are required");
+  }
+
+  const foundUser = user.find(
+    (u) => u.username === username && u.password === password,
   );
 
-  const querySnapshot = await getDocs(q);
-  if (querySnapshot.empty) {
-    throw new Error("User not found");
-  }
-  const userData = querySnapshot.docs[0].data() as User;
-
-  if (userData.password !== password) {
-    throw new Error("Incorrect password");
+  if (!foundUser) {
+    throw new Error("Invalid username or password");
   }
 
-  return userData;
+  return {
+    id: "1",
+    username: foundUser.username,
+    password: foundUser.password,
+  } as User;
 };
 
 export { Login };
