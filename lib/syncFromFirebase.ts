@@ -1,22 +1,43 @@
 import { SQLiteDatabase } from "expo-sqlite";
-import { collection, getDocs } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  orderBy,
+  query,
+  Timestamp,
+  where,
+} from "firebase/firestore";
 import db from "@/firebaseConfig";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const BATCH_SIZE = 200;
+
+const LAST_SYNC_KEY = "lastSyncTimestamp";
 
 export const syncFromFirebase = async (localDB: SQLiteDatabase) => {
   console.log("🔄 Syncing data from Firebase...");
   let transactionActive = false; // Flag untuk melacak status transaksi
 
+  const lastSyncStr = await AsyncStorage.getItem(LAST_SYNC_KEY);
+  const lastSync = lastSyncStr
+    ? Timestamp.fromDate(new Date(lastSyncStr))
+    : Timestamp.fromMillis(0);
+  console.log(`Last sync timestamp: ${lastSync.toDate().toLocaleString()}`);
+
   try {
-    const snapshot = await getDocs(collection(db, "sample_data"));
+    const q = query(
+      collection(db, "sample_data"),
+      where("updated_at", ">", lastSync),
+      orderBy("updated_at"),
+    );
+    const snapshot = await getDocs(q);
     const firebaseData = snapshot.docs.map((doc) => ({
       firebase_id: doc.id,
       data: doc.data(),
     }));
 
-    const totalRecords = firebaseData.length;
-    console.log(`📊 Total records to sync from Firebase: ${totalRecords}`);
+    console.log(`Found ${firebaseData.length} records to sync from Firebase.`);
+    console.log("lastSync:", lastSync);
 
     if (firebaseData.length === 0) {
       console.log("No new data to sync from Firebase.");
@@ -57,20 +78,33 @@ export const syncFromFirebase = async (localDB: SQLiteDatabase) => {
           .map((record) => {
             const values = record
               .map((val) => {
-                if (val === null || typeof val === "undefined") {
-                  return "NULL";
-                }
-                if (typeof val === "string") {
+                if (val === null || typeof val === "undefined") return "NULL";
+                if (typeof val === "string")
                   return `'${val.replace(/'/g, "''")}'`;
-                }
-                if (typeof val === "boolean") {
-                  return val ? 1 : 0;
-                }
+                if (typeof val === "boolean") return val ? 1 : 0;
+                // Kalau tipe Timestamp masih ada, convert dulu
+                if (val instanceof Timestamp)
+                  return `'${val.toDate().toISOString()}'`;
                 return val;
               })
               .join(", ");
 
-            return `INSERT INTO sample_data (blok, nomor_baris, image_uri, circle, gawangan, pruning, created_at, updated_at, is_synced, firebase_id) VALUES (${values});`;
+            return `
+            INSERT INTO sample_data
+              (blok, nomor_baris, image_uri, circle, gawangan, pruning, created_at, updated_at, is_synced, firebase_id)
+            VALUES (${values})
+            ON CONFLICT(firebase_id) DO UPDATE SET
+              blok = excluded.blok,
+              nomor_baris = excluded.nomor_baris,
+              image_uri = excluded.image_uri,
+              circle = excluded.circle,
+              gawangan = excluded.gawangan,
+              pruning = excluded.pruning,
+              created_at = excluded.created_at,
+              updated_at = excluded.updated_at,
+              is_synced = excluded.is_synced
+            ;
+          `;
           })
           .join("\n");
 
@@ -90,6 +124,21 @@ export const syncFromFirebase = async (localDB: SQLiteDatabase) => {
           } records)`,
         );
       }
+      const newestTimestamp = snapshot.docs.reduce((max, doc) => {
+        const updatedAt: Timestamp = doc.data().updated_at;
+        const millis = updatedAt?.toMillis?.() ?? 0;
+        return millis > max ? millis : max;
+      }, lastSync.toMillis());
+
+      console.log(
+        `Newest record timestamp: ${new Date(newestTimestamp).toLocaleString()}`,
+      );
+
+      await AsyncStorage.setItem(
+        LAST_SYNC_KEY,
+        new Date(newestTimestamp).toISOString(),
+      );
+      console.log("newestTimestamp:", newestTimestamp);
 
       console.log(`✅ Synced ${newRecords.length} new records from Firebase.`);
     } else {
