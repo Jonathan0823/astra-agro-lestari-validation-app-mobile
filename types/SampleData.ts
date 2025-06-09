@@ -6,7 +6,7 @@ export type SampleData = {
   circle: boolean;
   gawangan: boolean;
   pruning: boolean;
-  createdAt: string;
-  updatedAt: string;
+  created_at: string;
+  updated_at: string;
   firebase_id?: string;
 };
