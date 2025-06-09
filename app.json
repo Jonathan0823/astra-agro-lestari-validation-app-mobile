@@ -17,7 +17,7 @@
         "foregroundImage": "./assets/images/company-logo.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.jonathan.valscam"
+      "package": "com.jonathan.astraargolestari"
     },
     "web": {
       "bundler": "metro",
