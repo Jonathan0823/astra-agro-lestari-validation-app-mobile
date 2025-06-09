@@ -41,6 +41,8 @@ export const Providers: React.FC<SQLiteProviderProps> = ({ children }) => {
           is_synced INTEGER DEFAULT 0,
           firebase_id TEXT
         );
+
+        CREATE INDEX IF NOT EXISTS idx_firebase_id ON sample_data (firebase_id);
       `);
 
         setDb(database);
