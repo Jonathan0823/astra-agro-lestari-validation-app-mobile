@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Astra Argo Lestari",
+    "name": "ValsCam",
     "slug": "project1",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -16,7 +16,7 @@
         "foregroundImage": "./assets/images/company-logo.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.jonathan.astraargolestari"
+      "package": "com.jonathan.valscam"
     },
     "web": {
       "bundler": "metro",
