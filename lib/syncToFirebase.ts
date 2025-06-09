@@ -1,7 +1,7 @@
 import { SQLiteDatabase } from "expo-sqlite";
 import NetInfo from "@react-native-community/netinfo";
 import db from "@/firebaseConfig";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, Timestamp } from "firebase/firestore";
 import { SampleData } from "@/types/SampleData";
 
 export const syncToFirebase = async (localDB: SQLiteDatabase) => {
@@ -25,6 +25,7 @@ export const syncToFirebase = async (localDB: SQLiteDatabase) => {
 
       const docRef = await addDoc(collection(db, "sample_data"), {
         ...dataToUpload,
+        updated_at: Timestamp.fromDate(new Date(dataToUpload.updated_at)),
         syncedAt: new Date().toISOString(),
       });
 
