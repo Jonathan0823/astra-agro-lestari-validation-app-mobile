@@ -37,7 +37,6 @@ export const syncFromFirebase = async (localDB: SQLiteDatabase) => {
     }));
 
     console.log(`Found ${firebaseData.length} records to sync from Firebase.`);
-    console.log("lastSync:", lastSync);
 
     if (firebaseData.length === 0) {
       console.log("No new data to sync from Firebase.");
