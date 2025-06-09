@@ -36,12 +36,11 @@ export const insertData = async (db: SQLiteDatabase, data: SampleData) => {
         circleInt,
         gawanganInt,
         pruningInt,
-        data.createdAt,
-        data.updatedAt,
+        data.created_at,
+        data.updated_at,
       ],
     );
   } catch (error) {
-    console.error("Error inserting data:", error);
     throw error;
   }
 };

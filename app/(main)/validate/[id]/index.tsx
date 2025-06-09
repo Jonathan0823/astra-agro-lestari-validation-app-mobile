@@ -45,8 +45,8 @@ const Index = () => {
         gawangan: statusData[1].status,
         pruning: statusData[2].status,
         image_uri: savedUri,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
       };
 
       await insertData(db, payload);
