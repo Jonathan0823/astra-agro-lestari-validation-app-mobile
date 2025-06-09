@@ -51,7 +51,7 @@ const Index = () => {
           style={{ alignItems: "center", alignSelf: "center" }}
           className="text-4xl font-bold text-primary mb-10"
         >
-          ASTRA AGRO
+          ValsCam
         </Text>
         <Text className="font-semibold">ID :</Text>
         <TextInput
